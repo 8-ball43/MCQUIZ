@@ -1,0 +1,53 @@
+1.Sprawdzanie czy użytkownik jest zalogowany
+
+POCZĄTEK
+    // Pobranie danych z ciasteczek
+    token_user ← POBIERZ Z COOKIE "token"
+    id_user ← POBIERZ Z COOKIE "id"
+
+    // Sprawdzenie, czy token w ogóle istnieje
+    JEŻELI token_user JEST PUSTY TO:
+        PRZEKIERUJ DO "login.php"
+        ZAKOŃCZ
+
+    // Weryfikacja z bazą danych
+    dane_z_bazy ← WYKONAJ SQL "SELECT token FROM uzytkownicy WHERE id = id_user"
+    
+    // Sprawdzenie poprawności tokenu
+    JEŻELI token_user RÓŻNI SIĘ OD dane_z_bazy.token TO:
+        PRZEKIERUJ DO "login.php"
+        ZAKOŃCZ
+    W PRZECIWNYM RAZIE:
+        KONTYNUUJ (użytkownik zalogowany)
+KONIEC
+
+
+
+2.pobieranie pytan i odpowiedzi
+
+sPOCZĄTEK
+pytanie <- Wykonaj SQL "SELECT tresc FROM pytania WHERE id_pytania = numer pytania"
+wysietlenie pytania
+
+odpowiedzi <- Wykonaj SQL "SELECT*FROM odpowiedzi WHERE pytanie_id = numer pytania"
+dopóki id_pytania < nasepne cyfra {
+wyświetlaj odpowiedzi jako przyciski
+}
+KONIEC 
+
+
+
+
+3.Wprowadzianie wynikow do tabeli
+
+POCZĄTEK
+
+//Pobieranie danych z formulaza i cookie
+wynik <- Pobierz wynik z form 
+token <- Pobierz token z cookie
+id -< Pobierz z bazy gdize jest ten sam token co w cookie
+
+wysyłanie danych do bazy -> WYKONAJ SQL "INSERT INTO wyniki(id_gracza,uzyskany_wynik)VALUES(id,wynik)"
+
+KONIEC
+
